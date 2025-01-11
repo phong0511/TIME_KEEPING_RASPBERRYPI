@@ -2,7 +2,7 @@ import cv2
 import os
 from datetime import datetime
 
-# Change this to the name of the person you're photographing
+# Change this to the name of the person you're photographing test...
 PERSON_NAME = "qui"
 
 def create_folder(name):
