@@ -41,7 +41,7 @@ def capture_photos(name):
         
         key = cv2.waitKey(1) & 0xFF
         
-        if key == ord(' '):  # Space key
+        if key == ord(' '):  # Space keyyyyy
             photo_count += 1
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{name}_{timestamp}.jpg"
