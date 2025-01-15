@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 # Change this to the name of the person you're photographing test...
-PERSON_NAME = "qui"
+PERSON_NAME = "21522459"
 
 def create_folder(name):
     dataset_folder = "dataset"

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Management</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <h1 class="header-tittle">Phần mềm quản lý điểm danh</h1>
+    <!-- Video Stream -->
+    <!-- <video id="video" autoplay muted></video>
+    <button id="toggleCamera">Bật Camera</button> -->
+
+    <!-- Table Section -->
+    <h2>Danh sách nhân viên</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>MSSV</th>
+          <th>Tên</th>
+          <th>Ngày</th>
+          <th>Giờ vào</th>
+          <th>Trạng Thái</th>
+          <th>Hành Động</th>
+        </tr>
+      </thead>
+      <tbody id="employeeList"></tbody>
+    </table>
+
+    <!-- Summary Section -->
+    <div>
+      <p><strong>Tổng số nhân viên:</strong> <span id="total">0</span></p>
+      <p><strong>Số nhân viên đi trễ:</strong> <span id="lateCount">0</span></p>
+    </div>
+
+    <!-- Buttons -->
+    <button id="registerNew">Đăng ký khuôn mặt mới</button>
+    <button id="exportReport">Xuất Báo Cáo</button>
+
+    <!-- Firebase Initialization -->
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

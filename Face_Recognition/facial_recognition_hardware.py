@@ -8,14 +8,14 @@ from datetime import datetime
 
 # Firebase configuration
 config = {
-    "apiKey": "AIzaSyDhiVY-HO6C8aSiP8sOMo5Buxucimqn_F8",
-    "authDomain": "timekeeping-project-81830.firebaseapp.com",
-    "databaseURL": "https://timekeeping-project-81830-default-rtdb.firebaseio.com",
-    "projectId": "timekeeping-project-81830",
-    "storageBucket": "timekeeping-project-81830.firebasestorage.app",
-    "messagingSenderId": "957110757990",
-    "appId": "1:957110757990:web:21a831c14fa5110b9d5ba7",
-    "measurementId":  "G-2Y17NX87X7"
+    "apiKey": "AIzaSyA8y1iepfXtlSURONUiN3YRHjI7IunC1gE",
+    "authDomain": "esp32-dht-47e5d.firebaseapp.com",
+    "databaseURL": "https://esp32-dht-47e5d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "projectId": "esp32-dht-47e5d",
+    "storageBucket": "esp32-dht-47e5d.firebasestorage.app",
+    "messagingSenderId": "577240316281",
+    "appId": "1:577240316281:web:2704461c2a866ed71f57a8",
+    "measurementId":  "G-VKP0QN2QQ2"
 }
 
 firebase = pyrebase.initialize_app(config)
@@ -35,7 +35,27 @@ video_capture = cv2.VideoCapture(0)  # Use webcam (camera index 0)
 
 # Parameters
 cv_scaler = 4  # Resize factor for performance
-authorized_names = ["thang", "phong", "qui"]  # Replace with names you want to authorize
+
+# Initialize the authorized MSSV list (from Firebase)
+authorized_mssv = {}
+
+def update_authorized_mssv():
+    global authorized_mssv
+    try:
+        # Fetch the list of employees from 'employees' node
+        employees_data = database.child("employees").get().val()
+        
+        if employees_data:
+            # Extract MSSV data (MSSV -> {mssv, name, registerDate, timeIn})
+            # This assumes that 'employees' contains MSSV as the key for each employee
+            authorized_mssv = {}
+            for mssv, employee_data in employees_data.items():
+                authorized_mssv[mssv] = employee_data
+            print("[INFO] Authorized employees updated:", authorized_mssv)
+        else:
+            print("[INFO] No authorized employees found.")
+    except Exception as e:
+        print(f"[ERROR] Failed to update authorized employees: {e}")
 
 # Variables for face recognition
 face_locations = []
@@ -46,7 +66,7 @@ start_time = time.time()
 fps = 0
 
 def process_frame(frame):
-    global face_locations, face_encodings, face_names
+    global face_locations, face_encodings, face_names, authorized_mssv
     
     # Resize the frame for faster processing
     resized_frame = cv2.resize(frame, (0, 0), fx=1/cv_scaler, fy=1/cv_scaler)
@@ -62,31 +82,37 @@ def process_frame(frame):
     for face_encoding in face_encodings:
         key = cv2.waitKey(1) & 0xFF
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-        name = "Unknown"
+        mssv = "Unknown"
         
         if matches:
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
-                name = known_face_names[best_match_index]
+                mssv = known_face_names[best_match_index]  # Using name as MSSV (or if you have another MSSV list, use that)
                 
-                # Check if the detected face is authorized
-                if name in authorized_names:
-                   if key == ord('x'):
-                        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        data_name = name
-                        data_time = {"current_time": current_time}
-                        database.child("time_logs").set(data_time)
-                        authorized_face_detected = True
-                        database.child("Test_face")
-                        database.set(data_name)
-                        print(name)
+                # Check if the detected face's MSSV exists in authorized employees
+                if mssv in authorized_mssv:
+                    employee_info = authorized_mssv[mssv]
+                    name = employee_info["name"]
+                    register_date = employee_info["registerDate"]
+                    time_in = employee_info["timeIn"]
+                    
+                    # Format current time as mm/dd/yyyy hh:mm
+                    current_time = datetime.now().strftime('%m/%d/%Y %H:%M')
+                    
+                    # Update the timeIn for the employee
+                    database.child("employees").child(mssv).update({"timeIn": current_time})
+                    
+                    # Print employee details
+                    print(f"Authorized face detected: {name} (MSSV: {mssv}), Registered on: {register_date}, Time In: {time_in}")
+                    print(f"Current time: {current_time}")
         
-        face_names.append(name)
+        face_names.append(mssv)
     
-    # Control GPIO based on face detection
-
     return frame
+
+# Call the update function periodically to ensure the list of authorized users is up-to-date
+update_authorized_mssv()
 
 def draw_results(frame):
     for (top, right, bottom, left), name in zip(face_locations, face_names):
@@ -141,4 +167,3 @@ while True:
 # Cleanup
 video_capture.release()
 cv2.destroyAllWindows()
-output.off()
