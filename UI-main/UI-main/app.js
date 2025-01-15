@@ -79,16 +79,16 @@ function renderEmployeeList() {
     const formatCheckTime = formatTime(checkDate)
 
     const currentDate = new Date()
-    const formatCurrentTime = formatTime(currentDate)
+    currentDate.setHours(0, 0, 0, 0)
 
     let status = 1
-    //status = 1: đúng giờ, 0: trễ, 2: mới đk, 3: chưa điểm danh
-    if (formatCheckTime.day >= formatRegTime.day) {
+    // 0: trễ, status = 1: đúng giờ, 2: mới đk, 3: chưa điểm danh
+    if (checkDate.getTime() >= regDate.getTime()) {
       if (Number(formatCheckTime.hours) > 8) status = 0
       else if (Number(formatCheckTime.hours) === 8 && Number(formatCheckTime.minutes) > 0) status = 0
     }
     if (emp.timeIn === 'N/A') status = 2
-    if (Number(formatCheckTime.day) < Number(formatCurrentTime.day)) status = 3
+    if (checkDate.getTime() < currentDate.getTime()) status = 3
 
     if (status === 0) lateCountVal++
 
