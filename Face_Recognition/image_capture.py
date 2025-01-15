@@ -2,8 +2,8 @@ import cv2
 import os
 from datetime import datetime
 
-# Change this to the name of the person you're photographing
-PERSON_NAME = "qui"
+# Change this to the name of the person you're photographing test...
+PERSON_NAME = "21522459"
 
 def create_folder(name):
     dataset_folder = "dataset"
@@ -41,7 +41,7 @@ def capture_photos(name):
         
         key = cv2.waitKey(1) & 0xFF
         
-        if key == ord(' '):  # Space key
+        if key == ord(' '):  # Space keyyyyy
             photo_count += 1
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{name}_{timestamp}.jpg"
