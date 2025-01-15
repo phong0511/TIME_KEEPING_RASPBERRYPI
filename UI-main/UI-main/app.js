@@ -70,28 +70,46 @@ function renderEmployeeList() {
   let lateCountVal = 0
   console.log(employees)
   employees.forEach((emp) => {
+    let statusText = 'Đúng giờ'
+
     const regDate = new Date(emp.registerDate)
     const formatRegTime = formatTime(regDate)
 
     const checkDate = new Date(emp.timeIn)
     const formatCheckTime = formatTime(checkDate)
 
+    const currentDate = new Date()
+    const formatCurrentTime = formatTime(currentDate)
+
     let status = 1
-    if (formatCheckTime.day > formatRegTime.day) {
+    //status = 1: đúng giờ, 0: trễ, 2: mới đk, 3: chưa điểm danh
+    if (formatCheckTime.day >= formatRegTime.day) {
       if (Number(formatCheckTime.hours) > 8) status = 0
       else if (Number(formatCheckTime.hours) === 8 && Number(formatCheckTime.minutes) > 0) status = 0
     }
     if (emp.timeIn === 'N/A') status = 2
+    if (Number(formatCheckTime.day) < Number(formatCurrentTime.day)) status = 3
 
     if (status === 0) lateCountVal++
 
+    switch (status) {
+      case 0:
+        statusText = 'Đi trễ'
+        break
+      case 2:
+        statusText = 'Đăng kí mới'
+        break
+      case 3:
+        statusText = 'Chưa điểm danh'
+        break
+    }
     const row = `
       <tr>
         <td>${emp.mssv}</td>
         <td>${emp.name}</td>
         <td>${formatCheckTime.fullDay}</td>
         <td>${formatCheckTime.fullTime}</td>
-        <td>${status === 0 ? 'Đi trễ' : status === 2 ? 'Đăng kí mới' : 'Đúng giờ'}</td>
+        <td>${statusText}</td>
         <td>
           <button class="update-btn" data-index="${emp.mssv}">Cập nhật</button>
           <button class="delete-btn" data-index="${emp.mssv}">Xóa</button>

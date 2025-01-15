@@ -7,39 +7,45 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   </head>
-  <body>
-    <h1 class="header-tittle">Phần mềm quản lý điểm danh</h1>
-    <!-- Video Stream -->
-    <!-- <video id="video" autoplay muted></video>
-    <button id="toggleCamera">Bật Camera</button> -->
+  <body style="background-color: #f2ffef">
+    <h1 class="header-tittle">Hệ thống quản lý điểm danh - Nhóm <span style="color: #ffd700">Bug Slayer</span></h1>
+    <div style="margin: 0px 20px">
+      <h2 class="sub-tittle">
+        Môn:
+        <span style="font-size: 20px; color: red">Kỹ Thuật Hệ Thống Máy Tính - CE410</span>
+      </h2>
+      <!-- Video Stream -->
+      <!-- <video id="video" autoplay muted></video>
+      <button id="toggleCamera">Bật Camera</button> -->
 
-    <!-- Table Section -->
-    <h2>Danh sách nhân viên</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>MSSV</th>
-          <th>Tên</th>
-          <th>Ngày</th>
-          <th>Giờ vào</th>
-          <th>Trạng Thái</th>
-          <th>Hành Động</th>
-        </tr>
-      </thead>
-      <tbody id="employeeList"></tbody>
-    </table>
+      <!-- Table Section -->
+      <h2>Danh sách nhân viên</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>MSSV</th>
+            <th>Tên</th>
+            <th>Ngày</th>
+            <th>Giờ vào</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody id="employeeList"></tbody>
+      </table>
 
-    <!-- Summary Section -->
-    <div>
-      <p><strong>Tổng số nhân viên:</strong> <span id="total">0</span></p>
-      <p><strong>Số nhân viên đi trễ:</strong> <span id="lateCount">0</span></p>
+      <!-- Summary Section -->
+      <div>
+        <p><strong>Tổng số nhân viên:</strong> <span id="total">0</span></p>
+        <p><strong>Số nhân viên đi trễ:</strong> <span id="lateCount">0</span></p>
+      </div>
+
+      <!-- Buttons -->
+      <button id="registerNew">Đăng ký khuôn mặt mới</button>
+      <button id="exportReport">Xuất Báo Cáo</button>
+
+      <!-- Firebase Initialization -->
     </div>
-
-    <!-- Buttons -->
-    <button id="registerNew">Đăng ký khuôn mặt mới</button>
-    <button id="exportReport">Xuất Báo Cáo</button>
-
-    <!-- Firebase Initialization -->
     <script src="app.js" type="module"></script>
   </body>
 </html>
